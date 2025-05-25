@@ -15,6 +15,6 @@
 
 - name: Ensure Twingate service is started
   service:
-    name: twingate
+    name: twingate-connector
     state: started
     enabled: true

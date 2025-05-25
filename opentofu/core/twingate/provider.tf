@@ -1,5 +1,5 @@
 provider "proxmox" {
-  endpoint = "https://192.168.1.110:8006/"
+  endpoint = var.pm_endpoint
 
   # TODO: use terraform variable or remove the line, and use PROXMOX_VE_USERNAME environment variable
   username = "root@pam"

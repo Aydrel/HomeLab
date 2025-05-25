@@ -9,9 +9,8 @@ variable "pm_user" {
   default = "root@pam"
 }
 
-variable "pm_host" {
+variable "pm_endpoint" {
   type    = string
-  default = "192.168.1.110"
 }
 
 variable "pm_node" {

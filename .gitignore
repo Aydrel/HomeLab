@@ -1,1 +1,2 @@
 opentofu/**/.terraform
+opentofu/**/*.auto.tfvars
