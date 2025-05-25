@@ -1,0 +1,7 @@
+---
+- hosts: lxc_twingate
+  become: true
+  vars_files:
+    - vars/secrets.yml
+  roles:
+    - twingate

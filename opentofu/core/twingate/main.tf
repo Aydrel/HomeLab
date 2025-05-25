@@ -5,9 +5,8 @@ locals {
 }
 resource "proxmox_virtual_environment_container" "twingate" {
   description = "Managed by OpenTofu"
-
   node_name = "pve"
-  vm_id     = 103
+  vm_id     = 111
 
   initialization {
     hostname = "twingate"
@@ -26,12 +25,21 @@ resource "proxmox_virtual_environment_container" "twingate" {
   }
 
   network_interface {
-    name = "veth0"
+    name = "eth0"
+  }
+
+  memory {
+    dedicated = 1024
+    swap      = 512
+  }
+
+  cpu {
+    cores = 2
   }
 
   disk {
     datastore_id = "local-lvm"
-    size         = 10
+    size         = 8
   }
 
   operating_system {
@@ -46,10 +54,35 @@ resource "proxmox_virtual_environment_container" "twingate" {
     up_delay   = "60"
     down_delay = "60"
   }
+
+  features {
+    nesting = true
+  }
 }
 
 resource "random_password" "debian_container_password" {
   length           = 16
   override_special = "_%@"
   special          = true
+}
+
+resource "null_resource" "wait_for" {
+  depends_on = [proxmox_virtual_environment_container.twingate]
+
+  connection {
+    host = "192.168.1.111"
+    private_key = file("~/.ssh/id_rsa.pub")
+  }
+
+  provisioner "remote-exec" {
+    inline = ["echo 'connected'"]
+  }
+}
+
+resource "null_resource" "ansible" {
+  depends_on = [null_resource.wait_for]
+
+  provisioner "local-exec" {
+    command = "cd ../../../ansible && ansible-playbook -i inventory.yml playbook.yml -uroot"
+  }
 }

@@ -1,0 +1,20 @@
+---
+- name: Update & install curl
+  apt:
+    name: curl
+    state: present
+    update_cache: yes
+
+- name: Run script with environment variables
+  shell: curl -sSL "https://binaries.twingate.com/connector/setup.sh" | bash
+  environment:
+    TWINGATE_ACCESS_TOKEN: "{{ twingate_access_token }}"
+    TWINGATE_REFRESH_TOKEN: "{{ twingate_refresh_token }}"
+    TWINGATE_NETWORK: "{{ twingate_network }}"
+    TWINGATE_LABEL_DEPLOYED_BY: "{{ twingate_deployed_by }}"
+
+- name: Ensure Twingate service is started
+  service:
+    name: twingate
+    state: started
+    enabled: true
