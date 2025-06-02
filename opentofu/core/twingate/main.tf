@@ -37,6 +37,6 @@ resource "null_resource" "ansible" {
   depends_on = [null_resource.wait_for]
 
   provisioner "local-exec" {
-    command = "cd ../../../ansible && ansible-playbook -i inventory.yml playbook.yml -uroot"
+    command = "cd ../../../ansible && ansible-playbook -i inventory.yml twingate.yml -uroot"
   }
 }
